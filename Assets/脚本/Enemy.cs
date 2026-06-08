@@ -110,6 +110,10 @@ public class Enemy : MonoBehaviour, IHit
         if (_nowLife <= 0)
         {
             ItemDrop.TryDropItem(transform.position);
+            // 死亡粒子碎片
+            SpriteRenderer sr = GetComponentInChildren<SpriteRenderer>();
+            if (sr != null)
+                DeathParticles.Spawn(transform.position, sr.color);
             Destroy(gameObject);
         }
         else

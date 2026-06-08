@@ -14,12 +14,12 @@ public class CarpetWave : MonoBehaviour
     public float height = 0.45f;       // World height of carpet body
 
     [Header("Wave Parameters")]
-    public float waveSpeed = 1.8f;     // Slow traveling wave
-    public float waveAmp = 0.02f;      // Barely noticeable ripple
+    public float waveSpeed = 1.8f;     // Fast traveling wave
+    public float waveAmp = 0.02f;      // Noticeable ripple
     public float waveFreq = 2f;        // Gentle waves along length
 
     [Header("Vertical Float")]
-    public float floatAmp = 0.008f;   // Almost imperceptible bob
+    public float floatAmp = 0.008f;    // Noticeable bob
     public float floatSpeed = 1.8f;
 
     [Header("Soft Tilt")]

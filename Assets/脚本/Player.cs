@@ -67,16 +67,6 @@ public class Player : MonoBehaviour, IHit
         PlayerMove();
         PlayerJump();
         PlayerAttack();
-
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            SetHeart(1);
-        }
-        
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            SetHeart(-1);
-        }
     }
 
     private void LateUpdate()
@@ -367,6 +357,33 @@ public class Player : MonoBehaviour, IHit
             dir.Normalize();
         }
         _rigidbody2D.AddForce( dir * hitForce);
+
+        // 受伤无敌帧0.8秒
+        _isInvincible = true;
+        if (_playerSprite == null)
+        {
+            _playerSprite = GetComponentInChildren<SpriteRenderer>();
+            _originalColor = _playerSprite != null ? _playerSprite.color : Color.white;
+        }
+        StartCoroutine(HitInvincibleRoutine(0.8f));
+    }
+
+    private IEnumerator HitInvincibleRoutine(float duration)
+    {
+        float t = 0f;
+        while (t < duration)
+        {
+            t += Time.deltaTime;
+            if (_playerSprite != null)
+            {
+                float blink = Mathf.PingPong(Time.time * 10f, 1f);
+                _playerSprite.enabled = blink > 0.3f;
+            }
+            yield return null;
+        }
+        _isInvincible = false;
+        if (_playerSprite != null)
+            _playerSprite.enabled = true;
     }
 
     private IEnumerator ShieldBreakFlash()

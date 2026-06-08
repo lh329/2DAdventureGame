@@ -104,6 +104,9 @@ public class FlyingEnemy : MonoBehaviour, IHit
         if (_nowLife <= 0)
         {
             ItemDrop.TryDropItem(transform.position);
+            // 死亡粒子碎片
+            if (_spriteRenderer != null)
+                DeathParticles.Spawn(transform.position, _spriteRenderer.color);
             Destroy(gameObject);
         }
         else
