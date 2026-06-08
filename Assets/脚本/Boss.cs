@@ -88,17 +88,40 @@ public class Boss : MonoBehaviour, IHit
 
         hpBar.value = (float)_nowLife / maxLife;
 
-        // 半血狂暴（仅变色提示）
+        // 半血狂暴（攻击更快 + 子弹更多 + 变红）
         if (!_isEnraged && _nowLife <= maxLife / 2)
         {
             _isEnraged = true;
             if (_spriteRenderer != null)
                 _spriteRenderer.color = Color.red;
+            // 攻击间隔减半
+            attackInterval = new Vector2(attackInterval.x * 0.5f, attackInterval.y * 0.5f);
+            // 子弹数量 +3
+            attackCount += 3;
+            // 屏幕震动提示狂暴
+            StartCoroutine(EnrageShake());
         }
 
         // 传送到随机其他平台
         if (_teleportPoints.Length > 1)
             StartCoroutine(TeleportToRandomPlatform());
+    }
+
+    private IEnumerator EnrageShake()
+    {
+        Camera cam = Camera.main;
+        if (cam == null) yield break;
+        Vector3 origPos = cam.transform.position;
+        float dur = 0.35f;
+        float t = 0f;
+        while (t < dur)
+        {
+            t += Time.deltaTime;
+            float strength = (1f - t / dur) * 0.25f;
+            cam.transform.position = origPos + (Vector3)(UnityEngine.Random.insideUnitCircle * strength);
+            yield return null;
+        }
+        cam.transform.position = origPos;
     }
 
     private IEnumerator TeleportToRandomPlatform()

@@ -19,6 +19,7 @@ public class ItemDrop : MonoBehaviour
     private Rigidbody2D _rigidbody2D;
     private bool _grounded;
     private bool _collected;
+    private float _groundedY;
 
     private static Sprite _heartSprite;
     private static Sprite _invincibleSprite;
@@ -106,10 +107,10 @@ public class ItemDrop : MonoBehaviour
             // 停止水平漂移
             _rigidbody2D.velocity = new Vector2(0f, _rigidbody2D.velocity.y);
 
-            // 上下浮动（仅Y偏移，不动Rigidbody，避免穿透）
+            // 上下浮动（正弦波，固定基准Y）
             float t = Time.time - _spawnTime;
             Vector3 pos = transform.position;
-            pos.y += Mathf.Cos(t * floatSpeed) * floatAmplitude * Time.deltaTime;
+            pos.y = _groundedY + Mathf.Sin(t * floatSpeed) * floatAmplitude;
             transform.position = pos;
         }
     }
@@ -129,6 +130,7 @@ public class ItemDrop : MonoBehaviour
                     _rigidbody2D.velocity = Vector2.zero;
                     _rigidbody2D.gravityScale = 0f;
                 }
+                _groundedY = transform.position.y;
                 break;
             }
         }
